@@ -140,7 +140,7 @@ Contributions to NSSM-C# are welcome! Please feel free to submit a Pull Request.
 5. Open a Pull Request
 
 ## License
-
+Use at your own risk.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
