@@ -1,0 +1,86 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+    
+    - name: Restore dependencies
+      run: dotnet restore
+    
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+    
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      
+    - name: Publish CLI App
+      if: success()
+      run: dotnet publish src/NSSM.CLI/NSSM.CLI.csproj -c Release -o ./publish/cli --self-contained true -r win-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+    
+    - name: Publish WPF App
+      if: success()
+      run: dotnet publish src/NSSM.WPF/NSSM.WPF.csproj -c Release -o ./publish/wpf --self-contained true -r win-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
+    
+    - name: Create artifacts directory
+      run: mkdir -p ./artifacts
+      shell: bash
+    
+    - name: Create ZIP artifacts
+      if: success()
+      run: |
+        Compress-Archive -Path ./publish/cli/* -DestinationPath ./artifacts/nssm-cli-${{ github.ref_name }}.zip -Force
+        Compress-Archive -Path ./publish/wpf/* -DestinationPath ./artifacts/nssm-wpf-${{ github.ref_name }}.zip -Force
+      shell: pwsh
+    
+    - name: Create TAR.GZ artifacts
+      if: success()
+      run: |
+        tar -czf ./artifacts/nssm-cli-${{ github.ref_name }}.tar.gz -C ./publish/cli .
+        tar -czf ./artifacts/nssm-wpf-${{ github.ref_name }}.tar.gz -C ./publish/wpf .
+      shell: bash
+    
+    - name: Upload CLI EXE artifact
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nssm-cli-${{ github.ref_name }}
+        path: ./publish/cli/NSSM.CLI.exe
+        if-no-files-found: error
+    
+    - name: Upload WPF EXE artifact
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nssm-wpf-${{ github.ref_name }}
+        path: ./publish/wpf/NSSM.WPF.exe
+        if-no-files-found: error
+    
+    - name: Upload ZIP artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nssm-zip-packages-${{ github.ref_name }}
+        path: ./artifacts/*.zip
+        if-no-files-found: error
+    
+    - name: Upload TAR.GZ artifacts
+      if: success()
+      uses: actions/upload-artifact@v4
+      with:
+        name: nssm-targz-packages-${{ github.ref_name }}
+        path: ./artifacts/*.tar.gz
+        if-no-files-found: error

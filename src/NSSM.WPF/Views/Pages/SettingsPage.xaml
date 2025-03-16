@@ -1,0 +1,116 @@
+<Page x:Class="NSSM.WPF.Views.Pages.SettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NSSM.WPF.Views.Pages"
+      xmlns:vm="clr-namespace:NSSM.WPF.ViewModels"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d" 
+      d:DataContext="{d:DesignInstance Type=vm:SettingsViewModel, IsDesignTimeCreatable=False}"
+      Title="Settings">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <!-- Header -->
+        <TextBlock Grid.Row="0" Text="Settings" FontSize="22" FontWeight="Bold" Margin="0,0,0,20" />
+        
+        <!-- Settings Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Appearance Section -->
+                <materialDesign:Card Margin="0,0,0,20" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="Appearance" FontWeight="Medium" FontSize="18" Margin="0,0,0,16" />
+                        
+                        <!-- Theme Selection -->
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,16">
+                            <TextBlock Text="Application Theme" Margin="0,0,0,8" />
+                            <RadioButton Content="Light Theme" 
+                                        IsChecked="{Binding IsDarkTheme, Converter={StaticResource BoolToValueConverter}, ConverterParameter='False|True'}" 
+                                        Margin="0,0,0,4" />
+                            <RadioButton Content="Dark Theme" 
+                                        IsChecked="{Binding IsDarkTheme}" 
+                                        Margin="0,0,0,4" />
+                            <TextBlock Text="Changes to theme require application restart" 
+                                     Opacity="0.6" 
+                                     FontSize="12" 
+                                     Margin="0,4,0,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+                
+                <!-- Logging Section -->
+                <materialDesign:Card Margin="0,0,0,20" Padding="16">
+                    <StackPanel>
+                        <TextBlock Text="Logging" FontWeight="Medium" FontSize="18" Margin="0,0,0,16" />
+                        
+                        <!-- Log Level -->
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,16">
+                            <TextBlock Text="Log Level" Margin="0,0,0,8" />
+                            <ComboBox ItemsSource="{Binding LogLevels}" 
+                                     SelectedItem="{Binding SelectedLogLevel}" 
+                                     MinWidth="200"
+                                     HorizontalAlignment="Left"
+                                     Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                     materialDesign:HintAssist.Hint="Select log level"/>
+                        </StackPanel>
+                        
+                        <!-- Max Console Lines -->
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,16">
+                            <TextBlock Text="Maximum Console Lines" Margin="0,0,0,8" />
+                            <TextBox Text="{Binding MaxConsoleLines}" 
+                                    MinWidth="200"
+                                    HorizontalAlignment="Left"
+                                    Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                    materialDesign:HintAssist.Hint="Number of lines to keep in console"/>
+                        </StackPanel>
+                        
+                        <!-- Log Directory -->
+                        <StackPanel Orientation="Vertical" Margin="0,0,0,0">
+                            <TextBlock Text="Log Directory" Margin="0,0,0,8" />
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0" 
+                                        Text="{Binding LogFileDirectory}" 
+                                        Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                        materialDesign:HintAssist.Hint="Directory for log files"/>
+                                <Button Grid.Column="1" 
+                                       Command="{Binding BrowseLogDirectoryCommand}" 
+                                       Margin="8,0,0,0">
+                                    <materialDesign:PackIcon Kind="FolderOpen" />
+                                </Button>
+                            </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </materialDesign:Card>
+            </StackPanel>
+        </ScrollViewer>
+        
+        <!-- Action Buttons -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <Button Command="{Binding ResetCommand}" 
+                   Style="{StaticResource MaterialDesignOutlinedButton}" 
+                   Margin="0,0,8,0">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="Restore" Margin="0,0,8,0" />
+                    <TextBlock Text="Reset to Defaults" />
+                </StackPanel>
+            </Button>
+            <Button Command="{Binding SaveCommand}">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ContentSave" Margin="0,0,8,0" />
+                    <TextBlock Text="Save Settings" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Page> 
