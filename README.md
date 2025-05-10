@@ -29,14 +29,14 @@ NSSM-C# is a modern C# implementation of the popular NSSM (Non-Sucking Service M
 
 2. **Build from Source**
    ```powershell
-   git clone https://github.com/username/NSSM-CSharp.git
+   git clone https://github.com/rohit-kuinkel1/NSSM-CSharp.git
    cd NSSM-C#
    dotnet build -c Release
    ```
 
 ## Using the Command-Line Interface (CLI)
 
-NSSM-C# includes a powerful command-line interface for managing services programmatically or through scripts.
+NSSM-C# includes a command-line interface for managing services programmatically or through scripts.
 
 > **Note:** You must run the CLI with administrative privileges to manage services.
 
@@ -77,7 +77,7 @@ run-as-admin.bat install MyService "C:\path\to\app.exe"
 
 ## Using the Graphical User Interface (GUI)
 
-The NSSM-C# GUI provides an intuitive interface for managing all your Windows services.
+The NSSM-C# GUI provides an interface for managing all your Windows services.
 
 ### Starting the GUI
 
@@ -129,21 +129,10 @@ Enable detailed logging by editing the `appsettings.json` file:
 }
 ```
 
-## Contributing
-
-Contributions to NSSM-C# are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
 ## License
-Use at your own risk.
+Use at your own risk!!.
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
 - Original NSSM project for inspiration
-- All contributors to this project
